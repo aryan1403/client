@@ -111,7 +111,7 @@ function App() {
     <label for="exampleInputPassword1" class="form-label">Password</label>
     <input type="password" class="form-control" onChange={(event) => setpass(event.target.value)} value={pass} id="exampleInputPassword1"/>
   </div>
-  <button class="btn btn-primary" onClick={() => {
+  <button class="btn btn-primary"  onClick={() => {
     /*if(email == 'aryan@gmail.com' && pass == "123") { alert('login successfull')}
     else { alert('login failed')}*/
     if(!loading) {
