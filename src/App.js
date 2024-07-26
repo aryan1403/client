@@ -1,131 +1,46 @@
 import logo from "./logo.svg";
 import { gql, useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
+import NavBar from "./Components/navBar";
+import Item from "./Components/item";
 
 const query = gql`
-  query GetTodosWithUser {
-    getAllUsers {
-      email
-    }
+query GetAllProducts {
+  getAllProducts {
+    item
+    ratings
+    type
   }
+}
 `;
 
 function App() {
   const { data, loading } = useQuery(query);
 
-  // if (loading) return <h1>Loading...</h1>;
-  const [a, seta] = useState(0);
-  const [email, setemail] = useState('');
-  const [pass, setpass] = useState('');
-  useEffect(() => {
-    console.log("hello aryan");
-  }, [a]);
+  const imgurl = "https://www.healthyeating.org/images/default-source/home-0.0/nutrition-topics-2.0/general-nutrition-wellness/2-2-2-3foodgroups_fruits_detailfeature.jpg?sfvrsn=64942d53_4"
+
+  function getInventory() {
+    let items = [];
+    console.log(data.getAllProducts);
+    data.getAllProducts.forEach(e => {
+      items.push(
+        <Item imgurl={imgurl} title={e.item} desc={e.type} />
+      )
+    }); 
+
+    return items;
+  }
+
+  if (loading) return <h1>Loading...</h1>;
+  
   return (
     <>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">
-          My app
-        </a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">
-                Home
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                Link
-              </a>
-            </li>
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Dropdown
-              </a>
-              <ul class="dropdown-menu">
-                <li>
-                  <a class="dropdown-item" href="#">
-                    Action
-                  </a>
-                </li>
-                <li>
-                  <a class="dropdown-item" href="#">
-                    Another action
-                  </a>
-                </li>
-                <li>
-                  <hr class="dropdown-divider" />
-                </li>
-                <li>
-                  <a class="dropdown-item" href="#">
-                    Something else here
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link disabled" aria-disabled="true">
-                Disabled
-              </a>
-            </li>
-          </ul>
-          <form class="d-flex" role="search">
-            <input
-              class="form-control me-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-            />
-            <button class="btn btn-outline-success" type="submit">
-              Search
-            </button>
-          </form>
-        </div>
-      </div>
-    </nav>
+    <NavBar />
+    <div className="row">
+      {getInventory()}
+    </div>
 
-  <div class="container-fuild mb-3">
-    <label for="exampleInputEmail1" class="form-label">Email address</label>
-    <input type="email" class="form-control" onChange={(event) => setemail(event.target.value)} value={email} id="exampleInputEmail1" aria-describedby="emailHelp"/>
-    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-  </div>
-  <div class="mb-3">
-    <label for="exampleInputPassword1" class="form-label">Password</label>
-    <input type="password" class="form-control" onChange={(event) => setpass(event.target.value)} value={pass} id="exampleInputPassword1"/>
-  </div>
-  <button class="btn btn-primary"  onClick={() => {
-    /*if(email == 'aryan@gmail.com' && pass == "123") { alert('login successfull')}
-    else { alert('login failed')}*/
-    if(!loading) {
-      for(let i = 0; i < data.getAllUsers.length; i++) {
-        if(data.getAllUsers[i].email == email) {
-          alert('user found')
-          return;
-        }
-      }
-      alert('user not found')
-    }
-  }}>Submit</button>
-
-</>
+    </>
   );
 }
 
